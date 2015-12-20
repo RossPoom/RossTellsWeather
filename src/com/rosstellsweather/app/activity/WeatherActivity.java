@@ -7,7 +7,6 @@ import com.rosstellsweather.app.util.HttpCallBackListener;
 import com.rosstellsweather.app.util.HttpUtil;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,9 +36,6 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Toast.makeText(this,
-				"来查看" + getIntent().getStringExtra("county_code") + "的天气吗?",
-				Toast.LENGTH_SHORT).show();
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.weather_layout);
 
@@ -141,6 +137,7 @@ public class WeatherActivity extends Activity implements OnClickListener {
 			Intent intent = new Intent(this, ChooseAreaActivity.class);
 			intent.putExtra("from_weather_activity", true);
 			startActivity(intent);
+			finish();
 			break;
 		case R.id.refresh_weather:
 			Log.d("RossTellsWeather", "刷新天气");
