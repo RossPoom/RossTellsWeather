@@ -12,10 +12,12 @@ import com.rosstellsweather.app.util.HttpCallBackListener;
 import com.rosstellsweather.app.util.HttpUtil;
 import com.rosstellsweather.app.R;
 
-import android.R.integer;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -59,6 +61,13 @@ public class ChooseAreaActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		if (prefs.getBoolean("city_selected", false)) {
+			Intent intent = new Intent(this, WeatherActivity.class);
+			startActivity(intent);
+			finish();
+		}
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.choose_area);
 		listView = (ListView) findViewById(R.id.list_view);
@@ -75,14 +84,22 @@ public class ChooseAreaActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				if (currentLevel == LEVEL_PROVINCE) {
-					
+
 					selectedProvince = provinceList.get(position);
-					Log.d("RossTellsWeather", "读取"+selectedProvince.getProvinceName()+"的城市信息");
+					Log.d("RossTellsWeather",
+							"读取" + selectedProvince.getProvinceName() + "的城市信息");
 					queryCities();
 				} else if (currentLevel == LEVEL_CITY) {
 					Log.d("RossTellsWeather", "读取县城信息");
 					selectedCity = cityList.get(position);
 					queryCounties();
+				} else if (currentLevel == LEVEL_COUNTY) {
+					selectedCounty = countyList.get(position);
+					Log.d("RossTellsWeather", "读取"+selectedCounty.getCountyName()+"的天气信息");
+					Intent intent=new Intent(ChooseAreaActivity.this,WeatherActivity.class);
+					intent.putExtra("county_code", selectedCounty.getCountyCode());
+					startActivity(intent);
+					finish();
 				}
 
 			}
@@ -95,7 +112,7 @@ public class ChooseAreaActivity extends Activity {
 	protected void queryProvinces() {
 		Log.d("RossTellsWeather", "123");
 		provinceList = rossTellsWeatherDB.loadProvince();
-		
+
 		if (provinceList.size() > 0) {
 			dataList.clear();
 			for (Province province : provinceList)
@@ -175,6 +192,7 @@ public class ChooseAreaActivity extends Activity {
 				if (result) {
 					Log.d("RossTellsWeather", "已在服务器查询到数据");
 					runOnUiThread(new Runnable() {
+						@Override
 						public void run() {
 							closeProgressDialog();
 							if ("province".equals(type)) {
@@ -192,6 +210,7 @@ public class ChooseAreaActivity extends Activity {
 			@Override
 			public void onError(Exception e) {
 				runOnUiThread(new Runnable() {
+					@Override
 					public void run() {
 						closeProgressDialog();
 						Toast.makeText(ChooseAreaActivity.this, "加载失败",

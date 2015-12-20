@@ -1,7 +1,5 @@
 package com.rosstellsweather.app.model;
 
-import android.R.integer;
-
 public class City {
 	private int id;
 	private String cityName;

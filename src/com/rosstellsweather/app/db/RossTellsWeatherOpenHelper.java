@@ -1,7 +1,6 @@
 package com.rosstellsweather.app.db;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -32,7 +31,7 @@ public class RossTellsWeatherOpenHelper extends SQLiteOpenHelper {
 	@Override
 	//初始化时创建province，city和county三张表
 	public void onCreate(SQLiteDatabase db) {
-		Log.d("RossTellsWeather","第一次使用，正在又创建SQLiteOpenHelper...");
+		Log.d("RossTellsWeather","首次使用，正在创建SQLiteOpenHelper...");
 		db.execSQL(CREATE_PROVINCE);
 		Log.d("RossTellsWeather", "首次使用，正在创建Province表");
 		db.execSQL(CREATE_City);
@@ -46,7 +45,6 @@ public class RossTellsWeatherOpenHelper extends SQLiteOpenHelper {
 			CursorFactory factory, int version) {
 		
 		super(context, name, factory, version);
-		Log.d("RossTellsWeather","第一次使用，正在创建SQLiteOpenHelper...");
 	}
 	
 	@Override

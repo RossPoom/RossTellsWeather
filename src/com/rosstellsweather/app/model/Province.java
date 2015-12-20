@@ -1,6 +1,5 @@
 package com.rosstellsweather.app.model;
 
-import android.R.integer;
 
 public class Province {
 
